@@ -1,0 +1,47 @@
+{% extends 'poll/base.html' %}
+{% block title %}{% if question %}Edit{% else %}New{% endif %} Question{% endblock %}
+{% block body %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<form action="{% if question.id %} {% url 'ques' question.id %} {% else %} {% url 'ques' %} {% endif %}" method="post">
+{% csrf_token %}
+<label for="question_text">Question Text</label><br />
+<input type="text" name="question_text" id="question_text" class="form-control" {% if question %} value="{{ question.question_text }}" {% endif %}/><br />
+<div id="choices">
+{% for c in choices %}
+    <div class="row">
+    	<label class="col-xs-4">Choice Text</label>
+    	<div class="col-xs-6">
+    	<input type="text" name="choice[]" id="choice-{{ forloop.counter }}" class="form-control" value="{{ c.choice_text }}" />
+    	</div>
+    	<div class="col-xs-2">
+    	<button type="button" class="btn" onclick="removeChoice(this)">&times;</button>
+    	</div>
+    	&nbsp;<br />
+    </div>
+{% endfor %}
+</div>
+<button type="button" class="btn" onclick="addChoice()">Add Choice</button>
+<input type="submit" class="btn" value="Submit" />
+</form>
+
+<script>
+function addChoice() {
+    var i = document.getElementsByName('choice[]').length+1
+    var div = document.createElement('div');
+    div.className = "row";
+    div.innerHTML = '<label class="col-xs-4">Choice Text</label>'+
+       '<div class="col-xs-6"><input type="text" name="choice[]" id="choice-'+i+'" class="form-control" /></div>'+
+       '<div class="col-xs-2"><button type="button" class="btn" onclick="removeChoice(this)">&times;</button></div>&nbsp;<br />';
+    document.getElementById('choices').appendChild(div);
+}
+
+function removeChoice(btn) {
+	console.log(btn.parentNode,btn.parentNode.parentNode);
+    document.getElementById('choices').removeChild( btn.parentNode.parentNode );
+    var inputs = document.getElementsByName('choice[]')
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].id = 'choice-'+(i+1);
+    };
+}
+</script>
+{% endblock %}

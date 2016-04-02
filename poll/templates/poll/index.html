@@ -1,9 +1,18 @@
+{% extends 'poll/base.html' %}
+{% block title %}Poll Questions{% endblock %}
+{% block body %}
 {% if question_list %}
-    <ul>
+    <ul class="list-simple">
     {% for question in question_list %}
-        <li><a href="{% url 'detail' question.id %}">{{ question.question_text }}</a></li>
+        <li class="row"><a class="col-xs-9" href="{% url 'detail' question.id %}">{{ question.question_text }}</a>
+        {% if question.user_id == user.pk %}
+        	<a class="col-xs-3" href="{% url 'ques' question.id %}">Edit</a>
+        {% endif %}
+        </li>
+        <hr />
     {% endfor %}
     </ul>
 {% else %}
-    <p>No more polls are available.</p>
+    <p>No polls are available.</p>
 {% endif %}
+{% endblock %}

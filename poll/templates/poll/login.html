@@ -1,0 +1,28 @@
+{% extends 'poll/base.html' %}
+{% block title %}Login{% endblock %}
+{% block body %}
+<h2 class="text-center">Login</h2>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'login' %}" method="post">
+{% csrf_token %}
+<div class="row">
+<div class="col-sm-offset-3 col-sm-6">
+<label for="username">Username</label><br />
+<input type="text" name="username" id="username" class="form-control" />
+</div>
+</div><br />
+<div class="row">
+<div class="col-sm-offset-3 col-sm-6">
+<label for="password">Password</label><br />
+<input type="password" name="password" id="password" class="form-control" />
+</div>
+</div><br />
+<div class="row">
+<div class="col-sm-offset-3 col-sm-6">
+<input type="submit" class="btn pull-right" value="Login" />
+</div>
+</div>
+</form>
+{% endblock %}
